@@ -1,0 +1,47 @@
+apiVersion: backstage.io/v1beta2
+kind: Template
+metadata:
+  name: simple-project-template
+  title: Simple Project Template
+  description: A very simple Backstage template to create a GitHub repository.
+  tags:
+    - github
+    - simple
+    - project
+  #annotations:
+  #  backstage.io/techdocs-ref: url:https://github.com/<OWNER>/<REPO>/blob/main/README.md
+spec:
+  owner: team@example.com
+  type: service
+
+  parameters:
+    - title: Project Details
+      required:
+        - projectName
+        - githubOwner
+      properties:
+        projectName:
+          type: string
+          title: Project Name
+          description: The name of your new project
+          example: my-new-project
+        githubOwner:
+          type: string
+          title: GitHub Owner
+          description: GitHub username or organization name
+          example: your-github-username
+
+  steps:
+    - id: fetch-base
+      name: Fetch Base Template
+      action: fetch:plain
+      input:
+        url: https://github.com/alexhaeberle/backstage-templates/archive/refs/heads/main.zip
+        targetPath: ./{{ parameters.projectName }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: https://github.com/{{ parameters.githubOwner }}/{{ parameters.projectName }}
+        accessToken: ${{ secrets.github.token }}
