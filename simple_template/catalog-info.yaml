@@ -36,8 +36,9 @@ spec:
       name: Fetch Base Template
       action: fetch:plain
       input:
-        url: https://github.com/alexhaeberle/backstage-templates/archive/refs/heads/main.zip
+        url: https://github.com/alexhaeberle/simple-template/archive/refs/heads/main.zip
         targetPath: ./{{ parameters.projectName }}
+        accessToken: ${{ secrets.github.token }}
 
     - id: publish
       name: Publish to GitHub
